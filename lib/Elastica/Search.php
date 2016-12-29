@@ -475,7 +475,6 @@ class Search
         $this->setOptionsAndQuery(null, $query);
 
         $query = $this->getQuery();
-        $query->setSize(0);
         $path = $this->getPath() . '/_count';
 
         $response = $this->getClient()->request(
@@ -483,9 +482,10 @@ class Search
             Request::GET,
             $query->toArray()
         );
+
         $resultSet = $this->_builder->buildResultSet($response, $query);
 
-        return $fullResult ? $resultSet : $resultSet->getTotalHits();
+        return $response->getData()['count'];
     }
 
     /**
